@@ -1,11 +1,11 @@
-#->====================================<-
-#->= SvTX - © Copyright 2022 OnyxSoft =<-
-#->====================================<-
-#->= Version  : 1.0                   =<-
-#->= File     : Makefile              =<-
-#->= Author   : Stefan Blixth         =<-
-#->= Compiled : 2022-06-16            =<-
-#->====================================<-
+#->============================================<-
+#->= SvTX - (c) Copyright 2022, 2026 OnyxSoft =<-
+#->============================================<-
+#->= Version  : 1.0                           =<-
+#->= File     : Makefile                      =<-
+#->= Author   : Stefan Blixth                 =<-
+#->= Compiled : 2026-11-24                    =<-
+#->============================================<-
 
 #
 # Application specific stuff
@@ -19,8 +19,8 @@ APP_MORPHOS_DB		= $(APPNAME)_db
 #
 # Compiler tools assign
 #
-CC_MORPHOS			= gcc
-STRIP_MORPHOS		= strip
+CC_MORPHOS			= ppc-morphos-gcc-9
+STRIP_MORPHOS		= ppc-morphos-strip
 
 
 #
@@ -83,4 +83,4 @@ morphos: $(APP_MORPHOS)
 
 $(APP_MORPHOS):	$(SOURCE_APP)
 	$(CC_MORPHOS) $(SOURCE_APP) $(OPTS_MOS) $(CFLG_MOS) -o $(APP_MORPHOS)
-#	$(STRIP_MORPHOS) $(APP_MORPHOS)
+	$(STRIP_MORPHOS) $(APP_MORPHOS)

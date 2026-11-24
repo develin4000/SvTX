@@ -1,12 +1,12 @@
 /*
-->====================================<-
-->= SvTX - © Copyright 2022 OnyxSoft =<-
-->====================================<-
-->= Version  : 1.0                   =<-
-->= File     : main.c                =<-
-->= Author   : Stefan Blixth         =<-
-->= Compiled : 2022-06-16            =<-
-->====================================<-
+->============================================<-
+->= SvTX - (c) Copyright 2022, 2026 OnyxSoft =<-
+->============================================<-
+->= Version  : 1.0                           =<-
+->= File     : main.c                        =<-
+->= Author   : Stefan Blixth                 =<-
+->= Compiled : 2026-11-24                    =<-
+->============================================<-
 */
 
 #ifndef __MAIN_H__
@@ -81,7 +81,7 @@ static ULONG Name##_Dispatcher(void) { struct IClass *cl=(struct IClass*)REG_A0;
 #define EMAIL     "stefan@onyxsoft.se"
 #define URL       "www.onyxsoft.se"
 #define COMPANY   "OnyxSoft"
-#define COPYRIGHT "© " VYEARS " " AUTHOR ", " COMPANY
+#define COPYRIGHT "(c) " VYEARS " " AUTHOR ", " COMPANY
 
 #define VERSION   "1"
 #define REVISION  "0"
@@ -107,11 +107,11 @@ static ULONG Name##_Dispatcher(void) { struct IClass *cl=(struct IClass*)REG_A0;
 #endif
 
 
-#define VSTRING         VERS" ("DATE") © "VYEARS " " AUTHOR ", " COMPANY
+#define VSTRING         VERS" ("DATE") ï¿½ "VYEARS " " AUTHOR ", " COMPANY
 #define VERSTAG         "$VER:" VSTRING
 #define VERSTAG_MUI     "$VER: "VERS " ("DATE")"
 #define VERSTAG_SCREEN  VERS " ("DATE") "
-#define ABOUT           "SvTX is little Teletext-viewer for the Swedish SVT Text-service.\n\nAuthor : "AUTHOR " ("EMAIL")\nVersion : "VERSSHORT"\n\n\33c"URL"\n\n\33c©Copyright "VYEARS " " COMPANY
+#define ABOUT           "SvTX is little Teletext-viewer for the Swedish SVT Text-service.\n\nAuthor : "AUTHOR " ("EMAIL")\nVersion : "VERSSHORT"\n\n\33c"URL"\n\n\33cï¿½Copyright "VYEARS " " COMPANY
 
 
 static const char version[] = VERSTAG;
@@ -131,6 +131,10 @@ static Object *but_prev   = NULL;  // Button
 static Object *but_next   = NULL;  // Button
 static Object *str_page   = NULL;  // String
 static Object *grp_status = NULL;  // Group object
+static Object *grp_sub     = NULL; // Sub-page group
+static Object *but_subprev = NULL; // Button
+static Object *but_subnext = NULL; // Button
+static Object *txt_sub     = NULL; // Sub-page "n/m" text
 
 // Enumerated Objects...
 enum
@@ -146,6 +150,8 @@ enum
    ID_BUT_PREV,
    ID_BUT_NEXT,
    ID_CYC_INDEX,
+   ID_BUT_SUBPREV,
+   ID_BUT_SUBNEXT,
 };
 
 
@@ -153,11 +159,11 @@ static char *cycle_index[] =
 {
    "\33bInnehåll...",
    "\33l100 - Nyheter",
-   "\33l200 - Ekonomi",
+   //"\33l200 - Ekonomi",
    "\33l300 - Sport",
    "\33l330 - Resultatbörsen",
    "\33l377 - Målservice",
-   "\33l400 - Väder",
+   "\33l400 - Vädder",
    "\33l500 - Blandat",
    "\33l600 - På TV",
    "\33l700 - Innehåll",
@@ -171,6 +177,7 @@ extern struct MapData *iMap;
 
 // Prototypes...
 void OpenPageLink(WORD);
+void ShowSubPage(int);
 void SetGaugeStatus(char *);
 
 #endif // __MAIN_H__

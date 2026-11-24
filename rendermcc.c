@@ -1,12 +1,12 @@
 /*
-->====================================<-
-->= SvTX - © Copyright 2022 OnyxSoft =<-
-->====================================<-
-->= Version  : 1.0                   =<-
-->= File     : rendermcc.c           =<-
-->= Author   : Stefan Blixth         =<-
-->= Compiled : 2022-06-16            =<-
-->====================================<-
+->============================================<-
+->= SvTX - (c) Copyright 2022, 2026 OnyxSoft =<-
+->============================================<-
+->= Version  : 1.0                           =<-
+->= File     : rendermcc.c                   =<-
+->= Author   : Stefan Blixth                 =<-
+->= Compiled : 2026-11-24                    =<-
+->============================================<-
 */
 
 #include "main.h"
@@ -52,8 +52,7 @@ static ULONG Render_Dispose(struct IClass *cl, Object *obj, Msg msg)
 {
    struct RenderData *data = (struct RenderData *)INST_DATA(cl, obj);
 
-   if (data->decdata)
-      FreeVec(data->decdata);
+   // data->decdata is owned by urlparser.c (FreeSubPages()), don't free it here
 
    if (data->imgdata)
       FreeVec(data->imgdata);
@@ -217,7 +216,13 @@ static ULONG Render_Decode(struct IClass *cl, Object *obj)
    Object *dtobj = NULL;
    struct BitMapHeader *bmhead = NULL;
    struct RenderData *data = (struct RenderData *)INST_DATA(cl, obj);
-   
+
+   // Nothing is shown until a new image has been decoded successfully
+   data->active = FALSE;
+
+   if (!data->decdata || !data->decode_size)
+      return 0;
+
    dtobj = NewDTObject(NULL,
                        DTA_SourceType,        DTST_MEMORY,
                        DTA_SourceAddress,     data->decdata,
@@ -243,8 +248,12 @@ static ULONG Render_Decode(struct IClass *cl, Object *obj)
       data->picdata = NULL;
    }
 
-   data->picdata = AllocVec(sizeof(struct Picture), MEMF_ANY);
-   
+   if (!(data->picdata = AllocVec(sizeof(struct Picture), MEMF_ANY)))
+   {
+      DisposeDTObject(dtobj);
+      return 0;
+   }
+
    data->picdata->width  = bmhead->bmh_Width;
    data->picdata->height = bmhead->bmh_Height;
    data->picdata->depth  = bmhead->bmh_Depth;
